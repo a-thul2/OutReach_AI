@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
-from agents import Agent, Runner, trace, function_tool
+from agents import Agent, Runner, trace, function_tool, input_guardrail, GuardrailFunctionOutput
+from typing import Dict
 import sendgrid
 from openai import OpenAI
 import os
@@ -7,12 +8,11 @@ from sendgrid.helpers.mail import Mail, Email, To, Content
 import asyncio
 from agents import OpenAIChatCompletionsModel
 from openai import AsyncOpenAI
+from pydantic import BaseModel
 
 load_dotenv(override=True)
 
 gemini_api_key = os.getenv('GEMINI_API_KEY')
-from_base_email = os.getenv('FROM_EMAIL')
-to_base_email = os.getenv('TO_EMAIL')
 
 if not gemini_api_key:
     raise RuntimeError("GEMINI_API_KEY not set")
@@ -37,12 +37,29 @@ instructions3 = "You are a busy sales agent working for QuestAI, \
 a company that provides a SaaS tool for ensuring SOC2 compliance and preparing for audits, powered by AI. \
 You write concise, to the point cold emails."
 
+class NameCheckOutput(BaseModel):
+    is_name_in_message: bool
+    name: str
+
+guardrail_agent = Agent( 
+    name="Name check",
+    instructions="Check if the user is including someone's personal name in what they want you to do.",
+    output_type=NameCheckOutput,
+    model="gpt-4o-mini"
+)
+
+@input_guardrail
+async def guardrail_against_name(ctx, agent, message):
+    result = await Runner.run(guardrail_agent, message, context=ctx.context)
+    is_name_in_message = result.final_output.is_name_in_message
+    return GuardrailFunctionOutput(output_info={"found_name": result.final_output},tripwire_triggered=is_name_in_message)
+
 @function_tool
 def send_email(body: str):
     """ Send out an email with the given body to all sales prospects """
     sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
-    from_email = Email(from_base_email)
-    to_email = To(to_base_email)
+    from_email = Email("athul.menon10@gmail.com")  # Change to your verified sender
+    to_email = To("athulfreaks11@gmail.com")  # Change to your recipient
     content = Content("text/plain", body)
     mail = Mail(from_email, to_email, "Sales email", content).get()
     sg.client.mail.send.post(request_body=mail)
@@ -95,7 +112,8 @@ sales_manager = Agent(
     name="Sales Manager",
     instructions=instructions,
     tools=tools,
-    model=gemini_model
+    model=gemini_model,
+    input_guardrails=[guardrail_against_name]
 )
 
 message = "Send a cold sales email addressed to 'Dear CEO'"
