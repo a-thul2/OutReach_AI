@@ -4,7 +4,7 @@
 
 OutReach_AI is an **agentic AI workflow** that generates multiple cold sales email drafts using distinct AI sales personas, evaluates them automatically, and **sends only the single best email**—no spam, no guesswork.
 
-Unlike traditional AI email generators, OutreachAI enforces **quality through consensus**.
+Unlike traditional AI email generators, this enforces **quality through consensus**.
 
 ---
 
@@ -46,8 +46,8 @@ Unlike traditional AI email generators, OutreachAI enforces **quality through co
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/outreachai.git
-cd outreachai
+git clone https://github.com/your-username/OutReach_AI.git
+cd OutReach_AI
 ````
 
 ---
