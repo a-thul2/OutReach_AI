@@ -1,8 +1,8 @@
-# 🚀 OutreachAI
+# 🚀 OutReach_AI
 
 > **AI-curated cold outreach that sends only the best message.**
 
-OutreachAI is an **agentic AI workflow** that generates multiple cold sales email drafts using distinct AI sales personas, evaluates them automatically, and **sends only the single best email**—no spam, no guesswork.
+OutReach_AI is an **agentic AI workflow** that generates multiple cold sales email drafts using distinct AI sales personas, evaluates them automatically, and **sends only the single best email**—no spam, no guesswork.
 
 Unlike traditional AI email generators, OutreachAI enforces **quality through consensus**.
 
@@ -87,7 +87,7 @@ Send a cold sales email addressed to "Dear CEO"
 
 ---
 
-## 🧠 How OutreachAI Works
+## 🧠 How OutReach_AI Works
 
 1. **Draft Generation**
    Each sales agent independently generates a cold email.
