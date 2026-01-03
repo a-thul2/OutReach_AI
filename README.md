@@ -28,6 +28,9 @@ Unlike traditional AI email generators, this enforces **quality through consensu
 - 🔌 **Pluggable LLM Backend**  
   Uses Gemini via OpenAI-compatible routing (easily extendable).
 
+- 🛡️ **Input Guardrails**
+  Uses Input Guardrails to detect and ensure any Personally Identifiable Information (PII) is not used in the email.
+
 ---
 
 ## 🛠️ Tech Stack
@@ -103,6 +106,7 @@ Strict enforcement ensures:
 * Agents must be used for drafting
 * The manager cannot write emails directly
 * Only **one email** is ever sent
+* Personally Identifiable Information (PII) must not be used
 
 ---
 
