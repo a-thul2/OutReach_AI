@@ -20,6 +20,9 @@ if not gemini_api_key:
 if not os.environ.get("SENDGRID_API_KEY"):
     raise RuntimeError("SENDGRID_API_KEY not set")
 
+from_base_email = os.getenv('FROM_EMAIL')
+to_base_email = os.getenv('TO_EMAIL')
+
 
 GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
 gemini_client = AsyncOpenAI(base_url=GEMINI_BASE_URL, api_key=gemini_api_key)
@@ -58,8 +61,8 @@ async def guardrail_against_name(ctx, agent, message):
 def send_email(body: str):
     """ Send out an email with the given body to all sales prospects """
     sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SENDGRID_API_KEY'))
-    from_email = Email("athul.menon10@gmail.com")  # Change to your verified sender
-    to_email = To("athulfreaks11@gmail.com")  # Change to your recipient
+    from_email = Email(from_base_email)  # Change to your verified sender
+    to_email = To(to_base_email)  # Change to your recipient
     content = Content("text/plain", body)
     mail = Mail(from_email, to_email, "Sales email", content).get()
     sg.client.mail.send.post(request_body=mail)
